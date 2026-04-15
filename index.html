@@ -1,25 +1,921 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的保養品清單</title>
-    <style>
-        /* 這裡是 CSS，負責美化 */
-        body { font-family: sans-serif; background-color: #f9f4f0; color: #333; text-align: center; }
-        .menu-item { background: white; margin: 20px auto; padding: 15px; width: 80%; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h1 { color: #8d775f; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>肌膚測驗｜蘊光研所 Varnish.lab </title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf6f1;
+    --blush: #e8c4b0;
+    --rose: #c97b63;
+    --deep-rose: #a05a44;
+    --sage: #b5c4b1;
+    --warm-brown: #5c3d2e;
+    --light-text: #9a8478;
+    --card-bg: rgba(255,255,255,0.78);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Noto Sans TC', sans-serif; background-color: var(--cream); min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; top: -30%; right: -20%; width: 60vw; height: 60vw; background: radial-gradient(circle, #f0d9cc 0%, transparent 65%); pointer-events: none; z-index: 0; }
+  body::after { content: ''; position: fixed; bottom: -20%; left: -15%; width: 50vw; height: 50vw; background: radial-gradient(circle, #d6e0d3 0%, transparent 65%); pointer-events: none; z-index: 0; }
+
+  .container { position: relative; z-index: 1; width: 100%; max-width: 420px; margin: 0 auto; padding: 0 20px 52px; }
+
+  .screen { display: none; flex-direction: column; align-items: center; animation: fadeUp 0.45s ease forwards; width: 100%; }
+  .screen.active { display: flex; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* INTRO */
+  .brand-tag { display: inline-block; font-size: 10px; letter-spacing: 3px; color: var(--rose); border: 1px solid var(--blush); padding: 5px 14px; border-radius: 20px; margin-bottom: 22px; }
+  .intro-visual { width: 120px; height: 120px; margin: 0 auto 24px; border-radius: 50%; background: linear-gradient(135deg, #f5ddd3, var(--blush)); display: flex; align-items: center; justify-content: center; animation: pulse 3s ease-in-out infinite; }
+  .intro-visual-inner { width: 86px; height: 86px; border-radius: 50%; background: linear-gradient(135deg, #fdeee8, #f5ddd3); display: flex; align-items: center; justify-content: center; font-size: 34px; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(201,123,99,0.15); } 50% { box-shadow: 0 0 0 14px rgba(201,123,99,0); } }
+  .intro-title { font-family: 'Noto Serif TC', serif; font-size: 23px; font-weight: 300; color: var(--warm-brown); line-height: 1.65; margin-bottom: 10px; letter-spacing: 1px; }
+  .intro-sub { font-size: 13px; color: var(--light-text); line-height: 1.8; margin-bottom: 30px; }
+  .chips { display: flex; gap: 8px; width: 100%; margin-bottom: 26px; }
+  .chip { flex: 1; background: var(--card-bg); border: 1px solid rgba(232,196,176,0.5); border-radius: 12px; padding: 12px 8px; text-align: center; }
+  .chip-icon { font-size: 18px; margin-bottom: 4px; }
+  .chip-label { font-size: 10.5px; color: var(--light-text); line-height: 1.4; }
+
+  /* BUTTONS */
+  .btn-primary { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--rose), var(--deep-rose)); color: white; border: none; border-radius: 14px; font-family: 'Noto Sans TC', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 1px; cursor: pointer; box-shadow: 0 6px 20px rgba(160,90,68,0.28); transition: all 0.2s; }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-ghost { width: 100%; padding: 13px; background: transparent; color: var(--light-text); border: 1px solid rgba(232,196,176,0.4); border-radius: 12px; font-family: 'Noto Sans TC', sans-serif; font-size: 13px; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+
+  /* PROGRESS HEADER */
+  .q-header { width: 100%; display: flex; align-items: center; padding: 40px 0 22px; gap: 12px; }
+  .back-btn { width: 34px; height: 34px; border-radius: 50%; background: var(--card-bg); border: 1px solid rgba(232,196,176,0.5); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; color: var(--light-text); flex-shrink: 0; }
+  .progress-wrap { flex: 1; }
+  .progress-label { font-size: 9px; letter-spacing: 2px; color: var(--light-text); text-transform: uppercase; margin-bottom: 5px; }
+  .progress-bar { height: 3px; background: rgba(232,196,176,0.3); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(to right, var(--blush), var(--rose)); border-radius: 2px; transition: width 0.4s ease; }
+  .q-step { font-size: 10px; color: var(--light-text); flex-shrink: 0; }
+
+  /* QUESTION BODY */
+  .q-body { width: 100%; margin-bottom: 22px; }
+  .q-tag { font-size: 9px; letter-spacing: 2px; color: var(--sage); text-transform: uppercase; margin-bottom: 10px; display: block; }
+  .q-text { font-family: 'Noto Serif TC', serif; font-size: 19px; color: var(--warm-brown); line-height: 1.7; }
+  .q-hint { font-size: 11.5px; color: var(--light-text); margin-top: 7px; line-height: 1.6; }
+
+  /* OPTION CARDS */
+  .options { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+  .option { background: var(--card-bg); border: 1.5px solid rgba(232,196,176,0.38); border-radius: 14px; padding: 15px 18px; cursor: pointer; display: flex; align-items: flex-start; gap: 13px; transition: all 0.2s; }
+  .option:active { background: rgba(232,196,176,0.22); border-color: var(--blush); transform: scale(0.99); }
+  .option-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .option-title { font-size: 13.5px; font-weight: 500; color: var(--warm-brown); margin-bottom: 2px; line-height: 1.4; }
+  .option-desc { font-size: 11px; color: var(--light-text); line-height: 1.5; }
+
+  /* BINARY */
+  .binary-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .binary-card { background: var(--card-bg); border: 1.5px solid rgba(232,196,176,0.38); border-radius: 14px; padding: 22px 14px; cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 9px; transition: all 0.2s; }
+  .binary-card:active { transform: scale(0.97); }
+  .binary-icon { font-size: 30px; }
+  .binary-title { font-size: 14px; font-weight: 500; color: var(--warm-brown); }
+  .binary-sub { font-size: 11px; color: var(--light-text); line-height: 1.5; white-space: pre-line; }
+
+  /* TIER OPTIONS */
+  .tier-options { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+  .tier-card { background: var(--card-bg); border: 1.5px solid rgba(232,196,176,0.38); border-radius: 14px; padding: 16px 18px; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: all 0.2s; }
+  .tier-card:active { background: rgba(232,196,176,0.22); transform: scale(0.99); }
+  .tier-badge { min-width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; letter-spacing: 0.5px; flex-shrink: 0; }
+  .tier-badge.basic { background: rgba(181,196,177,0.25); color: #6d8b69; }
+  .tier-badge.advanced { background: rgba(232,196,176,0.35); color: var(--deep-rose); }
+  .tier-badge.premium { background: rgba(160,90,68,0.12); color: var(--deep-rose); }
+  .tier-content { flex: 1; }
+  .tier-name { font-size: 13px; font-weight: 500; color: var(--warm-brown); margin-bottom: 2px; }
+  .tier-desc { font-size: 11px; color: var(--light-text); line-height: 1.4; }
+  .tier-price { font-size: 14px; font-weight: 600; color: var(--rose); flex-shrink: 0; }
+
+  /* RESULT */
+  .result-top { text-align: center; padding: 48px 0 24px; width: 100%; }
+  .result-badge-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(232,196,176,0.25); border: 1px solid var(--blush); padding: 5px 14px; border-radius: 20px; font-size: 10px; color: var(--rose); letter-spacing: 1px; margin-bottom: 14px; }
+  .result-type { font-family: 'Noto Serif TC', serif; font-size: 21px; font-weight: 600; color: var(--warm-brown); margin-bottom: 6px; line-height: 1.4; }
+  .result-sub { font-size: 12.5px; color: var(--light-text); line-height: 1.7; white-space: pre-line; }
+
+  .result-card { width: 100%; background: var(--card-bg); border: 1px solid rgba(232,196,176,0.5); border-radius: 18px; padding: 20px; margin-bottom: 12px; }
+  .result-card-title { font-size: 9px; letter-spacing: 2px; color: var(--rose); text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .result-card-title::after { content: ''; flex: 1; height: 1px; background: rgba(232,196,176,0.4); }
+
+  .recommend-box { background: linear-gradient(135deg, rgba(201,123,99,0.08), rgba(181,196,177,0.1)); border-radius: 11px; padding: 15px; margin-bottom: 12px; }
+  .recommend-name { font-size: 15px; font-weight: 500; color: var(--warm-brown); margin-bottom: 4px; }
+  .recommend-price { font-size: 20px; font-weight: 600; color: var(--rose); margin-bottom: 6px; letter-spacing: 0.5px; }
+  .recommend-desc { font-size: 12px; color: var(--light-text); line-height: 1.7; }
+
+  /* comparison boxes for basic cleaning */
+  .compare-grid { display: flex; flex-direction: column; gap: 10px; }
+  .compare-box { background: var(--card-bg); border: 1.5px solid rgba(232,196,176,0.4); border-radius: 12px; padding: 15px; }
+  .compare-box.highlight { border-color: var(--blush); background: linear-gradient(135deg, rgba(232,196,176,0.15), rgba(201,123,99,0.06)); }
+  .compare-name { font-size: 14px; font-weight: 500; color: var(--warm-brown); margin-bottom: 3px; }
+  .compare-price { font-size: 18px; font-weight: 600; color: var(--rose); margin-bottom: 5px; }
+  .compare-desc { font-size: 11px; color: var(--light-text); line-height: 1.6; }
+  .compare-tag { display: inline-block; font-size: 9px; letter-spacing: 1px; color: var(--rose); border: 1px solid var(--blush); padding: 2px 8px; border-radius: 10px; margin-bottom: 6px; }
+
+  .urgency-note { background: rgba(232,196,176,0.2); border-left: 3px solid var(--rose); padding: 11px 13px; border-radius: 0 9px 9px 0; font-size: 11.5px; color: var(--warm-brown); line-height: 1.6; }
+  .symptoms-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .symptoms-list li { font-size: 12.5px; color: var(--warm-brown); display: flex; align-items: flex-start; gap: 9px; line-height: 1.5; }
+  .symptoms-list li::before { content: '·'; color: var(--rose); font-size: 17px; line-height: 1.1; flex-shrink: 0; }
+
+  .offer-banner { width: 100%; background: linear-gradient(135deg, var(--rose), var(--deep-rose)); border-radius: 14px; padding: 15px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; box-shadow: 0 6px 20px rgba(160,90,68,0.25); margin-bottom: 10px; transition: all 0.2s; }
+  .offer-banner:active { transform: scale(0.99); }
+  .offer-tag { font-size: 9px; color: rgba(255,255,255,0.75); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2px; }
+  .offer-text { font-size: 13.5px; font-weight: 500; color: white; line-height: 1.4; }
+  .offer-arrow { font-size: 22px; }
+
+  .hint-text { text-align: center; font-size: 11px; color: var(--light-text); margin-top: 10px; }
+</style>
 </head>
 <body>
-    <h1>Jiyu Skincare Menu</h1>
-    <div class="menu-item">
-        <h3>保濕精華液</h3>
-        <p>價格：$1,200</p>
+<div class="container">
+
+<!-- ══ INTRO ══ -->
+<div class="screen active" id="s-intro">
+  <div style="text-align:center;padding-top:52px;width:100%">
+    <div class="brand-tag"> 蘊光研所・Varnish.lab 皮膚管理中心</div>
+    <div class="intro-visual"><div class="intro-visual-inner">🌿</div></div>
+    <div class="intro-title">你的肌膚<br><strong style="font-weight:600">由你來掌控</strong></div>
+    <p class="intro-sub">3 個問題<br>幫你找到適合的管理課程</p>
+  </div>
+  <div class="chips">
+    <div class="chip"><div class="chip-icon">✉️</div><div class="chip-label">快速<br>2-3題</div></div>
+    <div class="chip"><div class="chip-icon">🔬</div><div class="chip-label">精準<br>個人化</div></div>
+    <div class="chip"><div class="chip-icon">💆</div><div class="chip-label">加入官方Line<br>領取優惠卷</div></div>
+  </div>
+  <button class="btn-primary" onclick="go('s-q1')">開始測驗 →</button>
+  <p class="hint-text">無需填寫個人資料，立即開始</p>
+</div>
+
+<!-- ══ Q1 敏感肌？ ══ -->
+<div class="screen" id="s-q1">
+  <div class="q-header">
+    <div class="back-btn" onclick="go('s-intro')">←</div>
+    <div class="progress-wrap"><div class="progress-label">測驗進度</div><div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div></div>
+    <div class="q-step">1 / 3</div>
+  </div>
+  <div class="q-body">
+    <span class="q-tag">✨肌膚狀況？</span>
+    <div class="q-text">你的肌膚<br>容易出現敏感狀況嗎？</div>
+    <div class="q-hint">輕微刺痛、泛紅、起疹、不耐受產品等等都算是敏感狀況</div>
+  </div>
+  <div class="binary-grid">
+    <div class="binary-card" onclick="go('s-q2-sensitive')">
+      <div class="binary-icon">😭</div>
+      <div class="binary-title">是的</div>
+      <div class="binary-sub">我的肌膚<br>比較敏感</div>
     </div>
-    <div class="menu-item">
-        <h3>修護乳霜</h3>
-        <p>價格：$1,500</p>
+    <div class="binary-card" onclick="go('s-q2-general')">
+      <div class="binary-icon">😃</div>
+      <div class="binary-title">還好</div>
+      <div class="binary-sub">肌膚狀況<br>算穩定</div>
     </div>
+  </div>
+</div>
+
+<!-- ══ Q2 敏感肌分支 ══ -->
+<div class="screen" id="s-q2-sensitive">
+  <div class="q-header">
+    <div class="back-btn" onclick="go('s-q1')">←</div>
+    <div class="progress-wrap"><div class="progress-label">測驗進度</div><div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div></div>
+    <div class="q-step">2 / 2</div>
+  </div>
+  <div class="q-body">
+    <span class="q-tag">✦ 敏感程度</span>
+    <div class="q-text">你的肌膚<br>最符合哪種狀況？</div>
+    <div class="q-hint">選擇最接近你目前狀態的描述</div>
+  </div>
+  <div class="options">
+    <div class="option" onclick="go('r-s-mild')"><div class="option-icon">🌤</div><div><div class="option-title">輕微敏感</div><div class="option-desc">換季＋壓力：肌膚通常在這兩件事發生時易處於敏感不穩定期。</div></div></div>
+    <div class="option" onclick="go('r-s-moderate')"><div class="option-icon">🔥</div><div><div class="option-title">中度敏感</div><div class="option-desc">肌膚高度不耐受，伴隨不明刺痛灼熱，保養品極難挑選。</div></div></div>
+    <div class="option" onclick="go('r-s-barrier')"><div class="option-icon">⚡</div><div><div class="option-title">肌膚屏障受損型</div><div class="option-desc">高反應性受損肌：一碰就炸，處於急需肌膚屏障重建期建。</div></div></div>
+    <div class="option" onclick="go('r-s-severe')"><div class="option-icon">🌹</div><div><div class="option-title">慢性炎症泛紅型</div><div class="option-desc">慢性紅臉症候群：持續性泛紅刺激，急需抗炎修復，酒糟機、玫瑰斑患者請按這。</div></div></div>
+    <div class="option" onclick="go('r-s-post')"><div class="option-icon">🏥</div><div><div class="option-title">醫美術後修護</div><div class="option-desc">剛做完醫美處置，肌膚在高度敏感修復期。</div></div></div>
+  </div>
+</div>
+
+<!-- ══ Q2 一般肌分支 ══ -->
+<div class="screen" id="s-q2-general">
+  <div class="q-header">
+    <div class="back-btn" onclick="go('s-q1')">←</div>
+    <div class="progress-wrap"><div class="progress-label">測驗進度</div><div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div></div>
+    <div class="q-step">2 / 3</div>
+  </div>
+  <div class="q-body">
+    <span class="q-tag">肌膚管理主要需求</span>
+    <div class="q-text">今天來到 蘊光研所 <br>你最想做什麼？</div>
+  </div>
+  <div class="options">
+    <div class="option" onclick="go('r-g-basic')"><div class="option-icon">🧼</div><div><div class="option-title">基礎清潔保養</div><div class="option-desc">想先試試看，做個日常的清潔與保養</div></div></div>
+    <div class="option" onclick="setQ2('hydration')"><div class="option-icon">💧</div><div><div class="option-title">補水保濕改善</div><div class="option-desc">皮膚乾燥、暗沉、補水需求</div></div></div>
+    <div class="option" onclick="setQ2('acne')"><div class="option-icon">🫧</div><div><div class="option-title">痘痘粉刺困擾</div><div class="option-desc">粉刺、痘痘、閉口反覆不斷</div></div></div>
+    <div class="option" onclick="setQ2('pore')"><div class="option-icon">🕳</div><div><div class="option-title">毛孔痘疤問題</div><div class="option-desc">毛孔粗大、痘疤色印、凹洞疤痕</div></div></div>
+    <div class="option" onclick="setQ2('bright')"><div class="option-icon">✨</div><div><div class="option-title">亮白淨斑需求</div><div class="option-desc">暗沉、膚色不均、斑點困擾</div></div></div>
+    <div class="option" onclick="setQ2('lifting')"><div class="option-icon">🪄</div><div><div class="option-title">提拉緊緻輪廓</div><div class="option-desc">鬆弛、法令紋、輪廓下垂</div></div></div>
+    <div class="option" onclick="go('r-g-hydro')"><div class="option-icon">💎</div><div><div class="option-title">想要最有感的改變</div><div class="option-desc">多個問題想一次改善，追求最顯著的效果</div></div></div>
+  </div>
+</div>
+
+<!-- ══ Q3 補水保濕 ══ -->
+<div class="screen" id="s-q3-hydration">
+  <div class="q-header">
+    <div class="back-btn" onclick="go('s-q2-general')">←</div>
+    <div class="progress-wrap"><div class="progress-label">測驗進度</div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div>
+    <div class="q-step">3 / 3</div>
+  </div>
+  <div class="q-body">
+    <span class="q-tag">✦ 極潤補水管理</span>
+    <div class="q-text">你目前的狀況<br>比較像哪一種？</div>
+  </div>
+  <div class="tier-options">
+    <div class="tier-card" onclick="go('r-g-hydration-basic')">
+      <div class="tier-badge basic">基礎</div>
+      <div class="tier-content"><div class="tier-name">乾燥緊繃缺水</div><div class="tier-desc">皮膚時常緊繃、摸起來乾粗</div></div>
+    </div>
+    <div class="tier-card" onclick="go('r-g-hydration-advanced')">
+      <div class="tier-badge advanced">進階</div>
+      <div class="tier-content"><div class="tier-name">暗沉浮粉卡妝</div><div class="tier-desc">底妝浮粉、卡紋、膚色暗沉</div></div>
+    </div>
+    <div class="tier-card" onclick="go('r-g-hydration-premium')">
+      <div class="tier-badge premium">高端</div>
+      <div class="tier-content"><div class="tier-name">長期脫皮乾紋</div><div class="tier-desc">乾到出現細紋、脫皮現象</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Q3 痘痘粉刺 ══ -->
+<div class="screen" id="s-q3-acne">
+  <div class="q-header">
+    <div class="back-btn" onclick="go('s-q2-general')">←</div>
+    <div class="progress-wrap"><div class="progress-label">測驗進度</div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div>
+    <div class="q-step">3 / 3</div>
+  </div>
+  <div class="q-body">
+    <span class="q-tag">✦ 去痘淨膚管理</span>
+    <div class="q-text">你目前的狀況<br>比較像哪一種？</div>
+  </div>
+  <div class="tier-options">
+    <div class="tier-card" onclick="go('r-g-acne-basic')">
+      <div class="tier-badge basic">基礎</div>
+      <div class="tier-content"><div class="tier-name">粉刺痘痘初期</div><div class="tier-desc">偶爾冒痘、有明顯粉刺</div></div>
+    </div>
+    <div class="tier-card" onclick="go('r-g-acne-advanced')">
+      <div class="tier-badge advanced">進階</div>
+      <div class="tier-content"><div class="tier-name">反覆冒痘閉口</div><div class="tier-desc">痘痘反覆、悶痘閉口明顯</div></div>
+    </div>
+    <div class="tier-card" onclick="go('r-g-acne-premium')">
+      <div class="tier-badge premium">高端</div>
+      <div class="tier-content"><div class="tier-name">囊腫痘疤難消</div><div class="tier-desc">深層囊腫、留下難消的痘疤</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Q3 毛孔痘疤 ══ -->
+<div class="screen" id="s-q3-pore">
+  <div class="q-header">
+    <div class="back-btn" onclick="go('s-q2-general')">←</div>
+    <div class="progress-wrap"><div class="progress-label">測驗進度</div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div>
+    <div class="q-step">3 / 3</div>
+  </div>
+  <div class="q-body">
+    <span class="q-tag">✦ 毛孔痘疤管理</span>
+    <div class="q-text">你目前的狀況<br>比較像哪一種？</div>
+  </div>
+  <div class="tier-options">
+    <div class="tier-card" onclick="go('r-g-pore-basic')">
+      <div class="tier-badge basic">基礎</div>
+      <div class="tier-content"><div class="tier-name">毛孔粗大粗糙</div><div class="tier-desc">毛孔明顯、膚感粗糙不細緻</div></div>
+    </div>
+    <div class="tier-card" onclick="go('r-g-pore-advanced')">
+      <div class="tier-badge advanced">進階</div>
+      <div class="tier-content"><div class="tier-name">痘疤色印不均</div><div class="tier-desc">留有紅印、棕色痘疤色素沉澱</div></div>
+    </div>
+    <div class="tier-card" onclick="go('r-g-pore-premium')">
+      <div class="tier-badge premium">高端</div>
+      <div class="tier-content"><div class="tier-name">凹洞疤痕深層</div><div class="tier-desc">有凹凸不平的深層疤痕</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Q3 亮白淨斑 ══ -->
+<div class="screen" id="s-q3-bright">
+  <div class="q-header">
+    <div class="back-btn" onclick="go('s-q2-general')">←</div>
+    <div class="progress-wrap"><div class="progress-label">測驗進度</div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div>
+    <div class="q-step">3 / 3</div>
+  </div>
+  <div class="q-body">
+    <span class="q-tag">✦ 亮白淨斑管理</span>
+    <div class="q-text">你目前的狀況<br>比較像哪一種？</div>
+  </div>
+  <div class="tier-options">
+    <div class="tier-card" onclick="go('r-g-bright-basic')">
+      <div class="tier-badge basic">基礎</div>
+      <div class="tier-content"><div class="tier-name">局部暗沉色差</div><div class="tier-desc">局部暗沉，想均勻提亮</div></div>
+    </div>
+    <div class="tier-card" onclick="go('r-g-bright-advanced')">
+      <div class="tier-badge advanced">進階</div>
+      <div class="tier-content"><div class="tier-name">整體膚色不均</div><div class="tier-desc">整臉暗沉、膚色不均勻</div></div>
+    </div>
+    <div class="tier-card" onclick="go('r-g-bright-premium')">
+      <div class="tier-badge premium">高端</div>
+      <div class="tier-content"><div class="tier-name">頑固斑點色積</div><div class="tier-desc">深色斑點、曬斑或色素沉積</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Q3 提拉塑顏 ══ -->
+<div class="screen" id="s-q3-lifting">
+  <div class="q-header">
+    <div class="back-btn" onclick="go('s-q2-general')">←</div>
+    <div class="progress-wrap"><div class="progress-label">測驗進度</div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div>
+    <div class="q-step">3 / 3</div>
+  </div>
+  <div class="q-body">
+    <span class="q-tag">✦ 提拉塑顏管理</span>
+    <div class="q-text">你目前的狀況<br>比較像哪一種？</div>
+  </div>
+  <div class="tier-options">
+    <div class="tier-card" onclick="go('r-g-lifting-basic')">
+      <div class="tier-badge basic">基礎</div>
+      <div class="tier-content"><div class="tier-name">輪廓鬆散模糊</div><div class="tier-desc">臉型輪廓開始變得不清晰</div></div>
+    </div>
+    <div class="tier-card" onclick="go('r-g-lifting-advanced')">
+      <div class="tier-badge advanced">進階</div>
+      <div class="tier-content"><div class="tier-name">嘴角法令紋現</div><div class="tier-desc">嘴角下垂、法令紋漸漸明顯</div></div>
+    </div>
+    <div class="tier-card" onclick="go('r-g-lifting-premium')">
+      <div class="tier-badge premium">高端</div>
+      <div class="tier-content"><div class="tier-name">全臉鬆弛下垂</div><div class="tier-desc">整體下垂感明顯，需要全面提拉</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     RESULT PAGES
+══════════════════════════════════════ -->
+
+<!-- 基礎清潔 -->
+<div class="screen" id="r-g-basic">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">基礎清潔保養</div>
+    <div class="result-sub">給你兩個選擇<br>依需求選最適合你的起點</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="compare-grid">
+      <div class="compare-box">
+        <div class="compare-tag">入門首選</div>
+        <div class="compare-name">經典管理</div>
+        <div class="compare-desc">清粉刺＋保濕導入，基礎清潔保養的完整體驗，適合第一次來想了解皮膚管理的你</div>
+      </div>
+      <div class="compare-box highlight">
+        <div class="compare-tag">✦ 敏感肌也適用</div>
+        <div class="compare-name">超清秀</div>
+        <div class="compare-desc">來自英國的水飛梭，溫和深層清潔，敏感肌也適用</div>
+      </div>
+    </div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">專業建議</div>
+    <div class="urgency-note">💬 第一次來建議先諮詢，讓我們了解你的肌膚狀況，為你選出最適合的入門課程。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 補水 基礎 -->
+<div class="screen" id="r-g-hydration-basic">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">極潤補水管理｜基礎</div>
+    <div class="result-sub">乾燥緊繃的肌膚<br>需要深層補水修護</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">💧 極潤補水管理</div>
+      <div class="recommend-desc">透過韓式導入技術補充深層水分，改善緊繃乾燥感，讓肌膚重回水潤彈性狀態。</div>
+    </div>
+    <div class="urgency-note">💬 建議連續進行 3-4 次效果最顯著，我們會為你規劃完整的補水計劃。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 補水 進階 -->
+<div class="screen" id="r-g-hydration-advanced">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">極潤補水管理｜進階</div>
+    <div class="result-sub">暗沉浮粉的肌膚<br>需要深度保濕與煥亮同步進行</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">💧 極潤補水管理</div>
+      <div class="recommend-desc">進階補水配方加強保濕鎖水效果，同步改善暗沉浮粉問題，讓底妝更服貼、膚色更均勻透亮。</div>
+    </div>
+    <div class="urgency-note">💬 暗沉浮粉通常與嚴重缺水有關，建議定期課程搭配居家保養，效果更持久。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 補水 高端 -->
+<div class="screen" id="r-g-hydration-premium">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">極潤補水管理｜高端</div>
+    <div class="result-sub">長期脫皮乾紋的肌膚<br>需要高濃度修護全面重建水分屏障</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">💧 極潤補水管理</div>
+      <div class="recommend-desc">高端修護配方針對長期乾燥、細紋與脫皮問題，深層重建保水屏障，讓肌膚從根本恢復水嫩飽滿感。</div>
+    </div>
+    <div class="urgency-note">⚠️ 長期乾紋需要積極修護，建議盡早開始課程計劃，避免肌膚問題持續加深。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 痘痘 基礎 -->
+<div class="screen" id="r-g-acne-basic">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">去痘淨膚管理｜基礎</div>
+    <div class="result-sub">粉刺痘痘初期<br>及早清理讓肌膚回到乾淨狀態</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">🫧 去痘淨膚管理</div>
+      <div class="recommend-desc">深層清潔毛孔，溫和去除粉刺與初期痘痘，同步調理皮脂分泌，讓肌膚回到清爽乾淨的狀態。</div>
+    </div>
+    <div class="urgency-note">💬 初期及早處理效果最好，建議定期每月一次維持清爽肌膚。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 痘痘 進階 -->
+<div class="screen" id="r-g-acne-advanced">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">去痘淨膚管理｜進階</div>
+    <div class="result-sub">反覆冒痘閉口<br>需要系統性的調理與深層淨化</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">🫧 去痘淨膚管理</div>
+      <div class="recommend-desc">針對反覆性痘痘與閉口問題進行深層疏通，搭配調理精華平衡皮脂，從根源減少痘痘反覆發作。</div>
+    </div>
+    <div class="urgency-note">⚠️ 反覆冒痘建議連續課程調理，我們將為你規劃完整的分階段改善計劃。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 痘痘 高端 -->
+<div class="screen" id="r-g-acne-premium">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">去痘淨膚管理｜高端</div>
+    <div class="result-sub">囊腫痘疤難消<br>需要積極的深層修護與疤痕改善</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">🫧 去痘淨膚管理</div>
+      <div class="recommend-desc">針對深層囊腫痘與難消痘疤進行高強度修護，結合抗炎舒緩與疤痕淡化技術，幫助肌膚逐步恢復平滑。</div>
+    </div>
+    <div class="urgency-note">🚨 囊腫型痘痘建議盡早積極介入，延誤處理可能造成更深的疤痕，請先諮詢讓我們評估。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 毛孔 基礎 -->
+<div class="screen" id="r-g-pore-basic">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">毛孔痘疤管理｜基礎</div>
+    <div class="result-sub">毛孔粗大粗糙<br>韓式管理幫你收斂細緻</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">🕳 毛孔痘疤管理</div>
+      <div class="recommend-desc">深層清潔毛孔角栓，搭配收斂緊緻護理，改善毛孔粗大與膚感粗糙，讓肌膚摸起來更細緻平滑。</div>
+    </div>
+    <div class="urgency-note">💬 定期進行毛孔管理效果更穩定，建議每月一次維持細緻膚質。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 毛孔 進階 -->
+<div class="screen" id="r-g-pore-advanced">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">毛孔痘疤管理｜進階</div>
+    <div class="result-sub">痘疤色印不均<br>淡化色素讓膚色重回均勻</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">🕳 毛孔痘疤管理</div>
+      <div class="recommend-desc">針對痘後色素沉澱與色印問題，結合毛孔疏通與淡斑修護，逐步均勻膚色並改善整體膚質。</div>
+    </div>
+    <div class="urgency-note">💬 色印通常需要持續課程改善，我們將為你規劃分階段的淡化計劃。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 毛孔 高端 -->
+<div class="screen" id="r-g-pore-premium">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">毛孔痘疤管理｜高端</div>
+    <div class="result-sub">凹洞疤痕深層<br>需要專業高端技術積極改善</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">🕳 毛孔痘疤管理</div>
+      <div class="recommend-desc">針對深層凹洞疤痕進行高端修護技術，刺激膠原蛋白再生，逐步填平疤痕使肌膚趨於平整光滑。</div>
+    </div>
+    <div class="urgency-note">🚨 凹洞疤痕需要長期積極管理，建議先諮詢讓我們為你制定完整的療程規劃。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 亮白 基礎 -->
+<div class="screen" id="r-g-bright-basic">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">亮白淨斑管理｜基礎</div>
+    <div class="result-sub">局部暗沉色差<br>提亮均勻讓好氣色回來</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">✨ 亮白淨斑管理</div>
+      <div class="recommend-desc">溫和煥膚搭配亮白精華導入，改善局部暗沉與色差，提升整體膚色明亮度，讓肌膚自然煥發光感。</div>
+    </div>
+    <div class="urgency-note">💬 搭配日常防曬習慣，亮白效果更持久穩定。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 亮白 進階 -->
+<div class="screen" id="r-g-bright-advanced">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">亮白淨斑管理｜進階</div>
+    <div class="result-sub">整體膚色不均<br>全面均勻提亮讓肌膚透白有光澤</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">✨ 亮白淨斑管理</div>
+      <div class="recommend-desc">進階亮白配方全臉均勻提亮，加強老廢角質代謝，整體改善膚色不均問題，讓肌膚看起來白皙透亮。</div>
+    </div>
+    <div class="urgency-note">💬 整體膚色不均建議連續課程調理，搭配居家美白保養效果加倍。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 亮白 高端 -->
+<div class="screen" id="r-g-bright-premium">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">亮白淨斑管理｜高端</div>
+    <div class="result-sub">頑固斑點色積<br>需要高端技術針對深層色素</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">✨ 亮白淨斑管理</div>
+      <div class="recommend-desc">針對頑固斑點與深層色素沉積，以高端淡斑技術集中改善，逐步分解色素讓斑點淡化，恢復均勻白皙膚色。</div>
+    </div>
+    <div class="urgency-note">⚠️ 頑固斑點需要持續且積極的管理，建議諮詢後制定長期的淡斑計劃。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 提拉 基礎 -->
+<div class="screen" id="r-g-lifting-basic">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">提拉塑顏管理｜基礎</div>
+    <div class="result-sub">輪廓鬆散模糊<br>及早緊緻讓臉型更立體清晰</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">🪄 提拉塑顏管理</div>
+      <div class="recommend-desc">韓式緊緻手法搭配提拉按摩，改善輪廓鬆散模糊感，讓臉型更清晰立體，找回年輕緊緻的輪廓線條。</div>
+    </div>
+    <div class="urgency-note">💬 及早開始緊緻管理效果更好，建議定期進行維持輪廓緊實感。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 提拉 進階 -->
+<div class="screen" id="r-g-lifting-advanced">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">提拉塑顏管理｜進階</div>
+    <div class="result-sub">嘴角法令紋現<br>緊緻提拉讓紋路淡化輪廓回升</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">🪄 提拉塑顏管理</div>
+      <div class="recommend-desc">針對嘴角下垂與法令紋進行集中提拉，結合深層緊緻技術，讓紋路淡化、輪廓上提，恢復年輕飽滿感。</div>
+    </div>
+    <div class="urgency-note">💬 法令紋建議持續課程改善，搭配居家提拉按摩效果更持久。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 提拉 高端 -->
+<div class="screen" id="r-g-lifting-premium">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">提拉塑顏管理｜高端</div>
+    <div class="result-sub">全臉鬆弛下垂<br>需要全面性的高端緊緻修護</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">🪄 提拉塑顏管理</div>
+      <div class="recommend-desc">全臉高端緊緻提拉技術，刺激膠原蛋白再生，全面改善鬆弛下垂問題，重塑緊緻立體的年輕臉型。</div>
+    </div>
+    <div class="urgency-note">🚨 全臉下垂建議積極介入，越早開始管理恢復效果越顯著，請先諮詢讓我們制定完整計劃。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<!-- 敏感肌結果頁 -->
+<div class="screen" id="r-s-mild">
+  <div class="result-top"><div class="result-badge-tag">✦ 測驗結果</div><div class="result-type">Lv.1 輕度敏感</div><div class="result-sub">屏障功能尚可<br>但肌膚已開始發出敏感訊號</div></div>
+  <div class="result-card"><div class="result-card-title">你的肌膚狀況</div><ul class="symptoms-list"><li>換季或壓力一來就泛紅、發癢</li><li>其他時候還算穩定，但皮膚越來越難照顧</li><li>屏障功能輕微受損，需要開始鞏固</li></ul></div>
+  <div class="result-card"><div class="result-card-title">推薦課程</div><div class="recommend-box"><div class="recommend-name">🌿 益菌修護管理</div><div class="recommend-desc">以益生菌成分溫和調理敏感肌膚，強化皮膚屏障、舒緩發炎反應，幫助肌膚重新建立穩定的防護力。</div></div><div class="urgency-note">💬 建議先諮詢，使用高級肌膚檢測儀了解你的肌膚狀況，為你制定個人化課程計劃。</div></div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()"><div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div><div class="offer-arrow">🎁</div></div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<div class="screen" id="r-s-moderate">
+  <div class="result-top"><div class="result-badge-tag">✦ 測驗結果</div><div class="result-type">Lv.2 中度敏感</div><div class="result-sub">肌膚正在發出求救訊號<br>需要積極的舒緩與修護</div></div>
+  <div class="result-card"><div class="result-card-title">你的肌膚狀況</div><ul class="symptoms-list"><li>不明原因的刺痛、灼熱感</li><li>試過很多產品，幾乎都容易不適</li><li>保養選擇越來越少，肌膚變得很難伺候</li></ul></div>
+  <div class="result-card"><div class="result-card-title">推薦課程</div><div class="recommend-box"><div class="recommend-name">🔬 處方膠囊管理｜單效</div><div class="recommend-desc">含一隻專業處方膠囊，針對中度敏感肌膚進行精準修護，有效舒緩刺痛灼熱感，逐步降低肌膚敏感程度。</div></div><div class="urgency-note">⚠️ 建議盡早預約諮詢，延誤修護可能讓敏感情況加重，我們會為你制定分階段改善計劃。</div></div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()"><div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div><div class="offer-arrow">🎁</div></div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<div class="screen" id="r-s-barrier">
+  <div class="result-top"><div class="result-badge-tag">✦ 測驗結果</div><div class="result-type">Lv.3 屏障受損型</div><div class="result-sub">肌膚防禦力已拉響警報<br>需要系統性重建屏障</div></div>
+  <div class="result-card"><div class="result-card-title">你的肌膚狀況</div><ul class="symptoms-list"><li>換產品或做完護膚就大爆發</li><li>外力一點刺激就全臉崩潰</li><li>皮膚屏障已受損，需要系統性重建，而不只是補水舒緩</li></ul></div>
+  <div class="result-card"><div class="result-card-title">推薦課程</div><div class="recommend-box"><div class="recommend-name">🛡 處方膠囊管理｜複方</div><div class="recommend-desc">含兩隻專業處方膠囊，針對屏障受損型肌膚進行複合修護，全面重建皮膚防護屏障，讓肌膚從脆弱走向穩定。</div></div><div class="urgency-note">🚨 屏障受損建議優先積極處理，請先諮詢讓我們評估你的肌膚狀態，制定完整的屏障重建計劃。</div></div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()"><div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div><div class="offer-arrow">🎁</div></div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+<div class="screen" id="r-s-severe">
+  <div class="result-top"><div class="result-badge-tag">✦ 測驗結果</div><div class="result-type">Lv.4 慢性泛紅型</div><div class="result-sub">屬於慢性炎症狀態<br>需要長期管理策略</div></div>
+  <div class="result-card"><div class="result-card-title">你的肌膚狀況</div><ul class="symptoms-list"><li>長期泛紅，像酒糟或玫瑰斑</li><li>臉部持續偏紅、伴隨明顯刺激感</li><li>屬於慢性炎症狀態，急性舒緩無法根本改善</li></ul></div>
+  <div class="result-card"><div class="result-card-title">推薦課程</div><div class="recommend-box"><div class="recommend-name">🌹 處方膠囊管理｜全效</div><div class="recommend-desc">含三隻專業處方膠囊，針對慢性泛紅型肌膚進行全效修護，有效緩解持續泛紅與炎症反應，搭配長期管理策略逐步改善。</div></div><div class="urgency-note">💬 慢性泛紅需要長期管理策略，建議先深入諮詢了解誘發因子，我們會為你規劃完整的課程週期。</div></div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()"><div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div><div class="offer-arrow">🎁</div></div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+
+<!-- 微型水光 -->
+<div class="screen" id="r-g-hydro">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">微型水光</div>
+    <div class="result-sub">所有課程中效果最顯著<br>一次改善多種肌膚問題</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">為什麼推薦你</div>
+    <ul class="symptoms-list">
+      <li>效果比一般管理課程更立竿見影</li>
+      <li>同時改善補水、毛孔、暗沉、緊緻等多種問題</li>
+      <li>依肌膚狀況選擇最適合的劑型，效果更精準</li>
+    </ul>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">課程說明</div>
+    <div class="recommend-box">
+      <div class="recommend-name">💎 微型水光</div>
+      <div class="recommend-desc">微型水光有多種專業劑型，包含全效修護、亮白淨透、緊緻毛孔調理等方向，由專業師諮詢後依你的肌膚狀況選擇最適合的配方，帶來最有感的改變。</div>
+    </div>
+    <div class="urgency-note">💬 建議先預約諮詢，使用高級肌膚檢測儀了解你的肌膚狀況後，我們會為你推薦最適合的劑型與課程計劃。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+
+
+<!-- 術後修護 -->
+<div class="screen" id="r-s-post">
+  <div class="result-top">
+    <div class="result-badge-tag">✦ 測驗結果</div>
+    <div class="result-type">醫美術後修護</div>
+    <div class="result-sub">術後肌膚處於高度敏感修復期<br>需要專業的術後管理</div>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">你的肌膚狀況</div>
+    <ul class="symptoms-list">
+      <li>剛做完雷射、微針、果酸換膚等醫美處置</li>
+      <li>肌膚處於高度敏感的修復期</li>
+      <li>需要專業術後管理，加速癒合、鎮靜泛紅、穩定屏障</li>
+    </ul>
+  </div>
+  <div class="result-card">
+    <div class="result-card-title">推薦課程</div>
+    <div class="recommend-box">
+      <div class="recommend-name">🏥 術後修護管理課程</div>
+      <div class="recommend-desc">全程以屏障保護為核心，不施行去角質及清粉刺，專為術後修復期設計，幫助加速癒合、鎮靜泛紅、穩定屏障，讓醫美效果更完整發揮。</div>
+    </div>
+    <div class="urgency-note">💬 術後修護需告知執行項目與術後天數，建議盡早預約，讓我們為你安排最適合的修護時間。</div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(181,196,177,0.2),rgba(232,196,176,0.15));border:1px solid rgba(181,196,177,0.4);border-radius:12px;padding:13px 15px;margin-bottom:12px;">
+    <span style="font-size:18px;flex-shrink:0">🔬</span>
+    <div style="font-size:11.5px;color:#5c3d2e;line-height:1.7;">首次預約諮詢將使用<strong>高級肌膚檢測儀</strong>全面檢測你的肌膚問題，幫助制定最精準的課程計劃。</div>
+  </div>
+  <div class="offer-banner" onclick="openBooking()">
+    <div><div class="offer-tag">新客限定</div><div class="offer-text">首次體驗課程<br>立即預約享優惠 →</div></div>
+    <div class="offer-arrow">🎁</div>
+  </div>
+  <button class="btn-ghost" onclick="go('s-intro')">↩ 重新測驗</button>
+</div>
+</div><!-- /container -->
+
+<script>
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const t = document.getElementById(id);
+  if (t) { t.classList.add('active'); window.scrollTo(0,0); }
+}
+
+function setQ2(type) {
+  go('s-q3-' + type);
+}
+
+function openBooking() {
+  // 請換成你的預約系統連結
+  window.open('https://url.ohbot.cc/2jtRKKFZR', '_blank');
+}
+</script>
 </body>
 </html>
