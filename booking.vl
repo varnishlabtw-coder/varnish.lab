@@ -1,0 +1,4 @@
+function 預約網站() {
+    // 選項1: 打開外部預約網站
+    window.open('https://go.hotcake.app/g/FRCXPN/s/LX5OG?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnBbl8aIBUBkxNZE-VfuJZKy5ozymmRWEeSpyFi3PsDcDPTebYgs0K_W7VNAM_aem_9r54Ae3LTHii0wjZjKM65w', '_blank');
+}
