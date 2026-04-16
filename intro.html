@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>皮膚測驗系統 - 介紹</title>
+    <title>皮膚測驗系統 - 蘊光研所 Varnish.lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="intro-style.css">
 </head>
 <body>
-    <!-- 導航欄 -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">🌟 皮膚護理</div>
@@ -18,227 +18,98 @@
         </div>
     </nav>
 
-    <!-- 首頁 Hero Section -->
     <section class="hero">
-        <div class="hero-content">
-            <h1>了解您的皮膚類型</h1>
-            <p>通過簡單的 3 道題目測驗，輕鬆了解您的皮膚特質</p>
-            <a href="index.html" class="btn-primary">立即開始測驗</a>
-        </div>
-        <div class="hero-image">
-            <div class="skin-icon">💅</div>
+        <div class="container">
+            <div class="hero-content">
+                <span class="subtitle">FIND YOUR GLOW</span>
+                <h1>了解您的皮膚類型</h1>
+                <p>透過科學診斷，為您定制專屬的護理方案</p>
+                <a href="index.html" class="btn-primary">立即開始測驗</a>
+            </div>
         </div>
     </section>
 
-    <!-- 功能介紹 -->
     <section class="features">
         <div class="container">
-            <h2>功能介紹</h2>
+            <div class="section-header">
+                <h2>功能介紹</h2>
+                <div class="line"></div>
+            </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">🎯</div>
                     <h3>精準診斷</h3>
-                    <p>通過科學的問卷設計，快速準確地診斷您的皮膚類型</p>
+                    <p>科學問卷設計，準確判別膚質</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">⏱️</div>
                     <h3>節省時間</h3>
-                    <p>只需 3 道簡單題目，3 分鐘內完成測驗</p>
+                    <p>只需 3 分鐘，快速獲得結果</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">📋</div>
                     <h3>完整建議</h3>
-                    <p>獲得針對您皮膚類型的專業護理建議</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>隨時重測</h3>
-                    <p>可以隨時重新測驗，了解皮膚變化</p>
+                    <p>專業護理方案與產品建議</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 皮膚類型預覽 -->
     <section class="skin-types">
         <div class="container">
-            <h2>皮膚類型詳解</h2>
+            <div class="section-header">
+                <h2>皮膚類型詳解</h2>
+                <p>了解不同膚質的特徵與保養關鍵</p>
+            </div>
             <div class="types-grid">
-                <!-- 油性皮膚 -->
                 <div class="type-card oily">
+                    <div class="type-tag">OILY</div>
                     <h3>🛢️ 油性皮膚</h3>
-                    <div class="type-content">
-                        <p><strong>特點：</strong></p>
-                        <ul>
-                            <li>油脂分泌旺盛</li>
-                            <li>毛孔粗大</li>
-                            <li>容易出現粉刺痘痘</li>
-                        </ul>
-                        <p><strong>護理重點：</strong></p>
-                        <ul>
-                            <li>定期深層清潔</li>
-                            <li>使用控油產品</li>
-                            <li>去角質護理</li>
-                        </ul>
-                    </div>
+                    <p>油脂分泌旺盛，毛孔較明顯</p>
+                    <div class="care-tip">重點：深層清潔、控油平衡</div>
                 </div>
-
-                <!-- 乾性皮膚 -->
                 <div class="type-card dry">
+                    <div class="type-tag">DRY</div>
                     <h3>💧 乾性皮膚</h3>
-                    <div class="type-content">
-                        <p><strong>特點：</strong></p>
-                        <ul>
-                            <li>皮膚緊繃乾燥</li>
-                            <li>毛孔細小</li>
-                            <li>容易脫皮敏感</li>
-                        </ul>
-                        <p><strong>護理重點：</strong></p>
-                        <ul>
-                            <li>加強保濕</li>
-                            <li>選用溫和潔面</li>
-                            <li>定期補水面膜</li>
-                        </ul>
-                    </div>
+                    <p>皮膚緊繃，容易產生細紋與脫皮</p>
+                    <div class="care-tip">重點：深層補水、修護屏障</div>
                 </div>
-
-                <!-- 混合性皮膚 -->
                 <div class="type-card combination">
+                    <div class="type-tag">MIX</div>
                     <h3>⚖️ 混合性皮膚</h3>
-                    <div class="type-content">
-                        <p><strong>特點：</strong></p>
-                        <ul>
-                            <li>T字部位偏油</li>
-                            <li>兩頰偏乾</li>
-                            <li>需要分區護理</li>
-                        </ul>
-                        <p><strong>護理重點：</strong></p>
-                        <ul>
-                            <li>分區護理</li>
-                            <li>平衡型產品</li>
-                            <li>針對性治療</li>
-                        </ul>
-                    </div>
+                    <p>T字部油膩，兩頰乾燥</p>
+                    <div class="care-tip">重點：分區護理、水油平衡</div>
                 </div>
-
-                <!-- 中性皮膚 -->
                 <div class="type-card normal">
+                    <div class="type-tag">NORMAL</div>
                     <h3>✨ 中性皮膚</h3>
-                    <div class="type-content">
-                        <p><strong>特點：</strong></p>
-                        <ul>
-                            <li>油水平衡</li>
-                            <li>毛孔均勻</li>
-                            <li>少有皮膚問題</li>
-                        </ul>
-                        <p><strong>護理重點：</strong></p>
-                        <ul>
-                            <li>溫和清潔</li>
-                            <li>基礎保濕</li>
-                            <li>防曬保護</li>
-                        </ul>
-                    </div>
+                    <p>理想的油水平衡狀態</p>
+                    <div class="care-tip">重點：基礎保濕、預防老化</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 為什麼選擇我們 -->
-    <section class="why-us">
-        <div class="container">
-            <h2>為什麼選擇我們的測驗？</h2>
-            <div class="reasons-grid">
-                <div class="reason">
-                    <span class="reason-number">01</span>
-                    <h3>科學基礎</h3>
-                    <p>基於皮膚學基礎知識設計的測驗問卷</p>
-                </div>
-                <div class="reason">
-                    <span class="reason-number">02</span>
-                    <h3>快速便捷</h3>
-                    <p>無需登錄，即開即用，隱私有保障</p>
-                </div>
-                <div class="reason">
-                    <span class="reason-number">03</span>
-                    <h3>專業建議</h3>
-                    <p>每種皮膚類型都有詳細的護理建議</p>
-                </div>
-                <div class="reason">
-                    <span class="reason-number">04</span>
-                    <h3>免費試用</h3>
-                    <p>完全免費，沒有隱藏費用</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 測驗流程 -->
-    <section class="process">
-        <div class="container">
-            <h2>測驗流程</h2>
-            <div class="process-steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>開始測驗</h3>
-                    <p>點擊"開始測驗"按鈕進入測驗</p>
-                </div>
-                <div class="step-arrow">→</div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>回答問題</h3>
-                    <p>根據實際情況回答 3 道題目</p>
-                </div>
-                <div class="step-arrow">→</div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>獲得結果</h3>
-                    <p>立即獲得皮膚類型診斷和護理建議</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 常見問題 -->
     <section class="faq">
         <div class="container">
-            <h2>常見問題</h2>
-            <div class="faq-items">
+            <div class="section-header">
+                <h2>常見問題</h2>
+            </div>
+            <div class="faq-list">
                 <div class="faq-item">
-                    <h3>Q: 測驗結果準確嗎？</h3>
-                    <p>A: 我們的測驗基於皮膚科學知識設計，可以準確判斷大多數情況。但對於複雜或特殊皮膚狀況，建議咨詢專業皮膚科醫生。</p>
+                    <h4>Q: 測驗結果準確嗎？</h4>
+                    <p>基於皮膚學基礎設計，能提供初步判斷建議。</p>
                 </div>
                 <div class="faq-item">
-                    <h3>Q: 測驗需要多長時間？</h3>
-                    <p>A: 整個測驗過程大約需要 2-3 分鐘，取決於您閱讀和選擇答案的速度。</p>
-                </div>
-                <div class="faq-item">
-                    <h3>Q: 可以多次測驗嗎？</h3>
-                    <p>A: 可以！您可以隨時重新測驗，了解皮膚狀況的變化。</p>
-                </div>
-                <div class="faq-item">
-                    <h3>Q: 我的個人信息會被保存嗎？</h3>
-                    <p>A: 不會。我們的測驗完全本地運行，不收集或保存任何個人信息。</p>
+                    <h4>Q: 我的隱私安全嗎？</h4>
+                    <p>測驗完全本地執行，我們不收集任何個人資料。</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <h2>準備好了嗎？</h2>
-            <p>立即開始您的皮膚測驗，發現最適合您的護理方案</p>
-            <a href="index.html" class="btn-primary-large">開始測驗</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 皮膚護理測驗系統。版權所有。</p>
-        </div>
+        <p>&copy; 2026 皮膚護理測驗系統 ｜ 蘊光研所 Varnish.lab</p>
     </footer>
-
-    <script src="intro-script.js"></script>
 </body>
 </html>
