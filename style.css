@@ -1,144 +1,57 @@
-/* ==========================================
-   1. 佈局基礎 (建立寬闊的呼吸感)
-   ========================================== */
-body {
-    line-height: 1.8;
-    margin: 0;
-    -webkit-font-smoothing: antialiased;
-    letter-spacing: 0.05em; /* 增加字距讓排版變高級 */
+/* 建立大面積留白的呼吸感 */
+section {
+    padding: 100px 0; /* 加大上下間距，這是高級感的來源 */
 }
 
 .container {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 0 40px; /* 增加兩側留白 */
+    padding: 0 30px;
 }
 
-/* ==========================================
-   2. 導航欄 (改為精緻細邊框)
-   ========================================== */
-.navbar {
-    padding: 25px 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid rgba(0,0,0,0.05); /* 極細分界線 */
-    /* background 保持你原本的設定 */
+/* 品牌小標題 (像 Jiyu 官網那樣的小字) */
+.brand-subtitle {
+    display: block;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 15px;
+    opacity: 0.7;
 }
 
-.nav-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-menu {
-    display: flex;
-    list-style: none;
-    gap: 40px; /* 加大導航間距 */
-}
-
-/* ==========================================
-   3. Hero Section (改為中置極簡風格)
-   ========================================== */
-.hero {
-    padding: 120px 0; /* 加大上下留白 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.hero h1 {
-    font-size: 2.8rem; /* 標題放大 */
-    font-weight: 700;
-    margin-bottom: 24px;
-}
-
-.hero p {
-    font-size: 1.1rem;
-    opacity: 0.8;
-    max-width: 600px;
-}
-
-.btn-primary, .btn-primary-large {
-    display: inline-block;
-    padding: 16px 50px;
-    border-radius: 50px; /* 圓角化提升現代感 */
-    text-decoration: none;
-    transition: transform 0.3s ease;
-    margin-top: 30px;
-    /* 配色由你原本的 CSS 決定 */
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-}
-
-/* ==========================================
-   4. 功能與皮膚卡片 (仿 Jiyu 網格排版)
-   ========================================== */
+/* 網格系統優化 */
 .features-grid, .types-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px; /* 統一間距 */
-    margin-top: 50px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px; /* 卡片之間的距離 */
+    margin-top: 60px;
 }
 
+/* 卡片式設計 (維持你原本的顏色，只改形狀) */
 .feature-card, .type-card {
-    padding: 40px 30px;
-    border-radius: 12px;
+    padding: 50px 30px;
+    border-radius: 15px;
     text-align: center;
+    transition: transform 0.3s ease;
+}
+
+/* 測驗區域的垂直居中 */
+#quiz-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
+
+/* 移除按鈕預設邊框，增加圓角感 */
+.btn-primary-large {
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 500;
     transition: all 0.3s ease;
-    /* background 保持你原本的設定 */
+    /* 顏色會抓取你原本 CSS 設定的 background-color */
 }
 
-/* 模仿 Jiyu 的卡片懸浮微動 */
-.type-card:hover {
-    transform: translateY(-5px);
-}
-
-.feature-icon {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-}
-
-/* ==========================================
-   5. 常見問題 (改為簡約清單)
-   ========================================== */
-.faq-items {
-    max-width: 800px;
-    margin: 50px auto;
-}
-
-.faq-item {
-    margin-bottom: 40px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    padding-bottom: 20px;
-}
-
-.faq-item h3 {
-    margin-bottom: 12px;
-}
-
-/* ==========================================
-   6. 頁尾與其他
-   ========================================== */
-.footer {
-    padding: 60px 0;
-    text-align: center;
-    font-size: 0.9rem;
-    opacity: 0.6;
-}
-
-h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 10px;
-}
-
-/* 手機版適應 */
-@media (max-width: 768px) {
-    .hero h1 { font-size: 2rem; }
-    .container { padding: 0 20px; }
+.btn-primary-large:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
