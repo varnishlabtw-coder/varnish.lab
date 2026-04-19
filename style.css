@@ -1,57 +1,148 @@
-/* 建立大面積留白的呼吸感 */
-section {
-    padding: 100px 0; /* 加大上下間距，這是高級感的來源 */
+/* ==========================================
+   1. 基礎設定 (Global Styles)
+   ========================================== */
+body {
+    font-family: 'Noto Sans TC', sans-serif;
+    line-height: 1.8;
+    margin: 0;
+    color: #333; /* 預設深色文字 */
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.05em;
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 0 30px;
 }
 
-/* 品牌小標題 (像 Jiyu 官網那樣的小字) */
-.brand-subtitle {
-    display: block;
-    font-size: 0.8rem;
-    letter-spacing: 0.3em;
-    margin-bottom: 15px;
-    opacity: 0.7;
+/* ==========================================
+   2. 導航欄 (Navbar)
+   ========================================== */
+.navbar {
+    padding: 25px 0;
+    position: sticky;
+    top: 0;
+    background: white; /* 這裡可改為你設定的導航欄背景色 */
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
-/* 網格系統優化 */
-.features-grid, .types-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px; /* 卡片之間的距離 */
-    margin-top: 60px;
-}
-
-/* 卡片式設計 (維持你原本的顏色，只改形狀) */
-.feature-card, .type-card {
-    padding: 50px 30px;
-    border-radius: 15px;
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
-/* 測驗區域的垂直居中 */
-#quiz-wrapper {
-    min-height: 80vh;
+.nav-container {
     display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
-/* 移除按鈕預設邊框，增加圓角感 */
+.logo {
+    font-weight: 700;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 0.9rem;
+}
+
+/* ==========================================
+   3. 品牌介紹區塊 (Intro Sections)
+   ========================================== */
+section {
+    padding: 100px 0; /* Jiyu 風格的大面積留白 */
+}
+
+.brand-subtitle {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+    opacity: 0.6;
+}
+
+.hero {
+    text-align: center;
+    padding: 150px 0;
+    /* 如果有背景色/圖，會在這裡顯示 */
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-header .line {
+    width: 30px;
+    height: 2px;
+    background: currentColor; /* 自動抓取文字顏色 */
+    margin: 20px auto;
+}
+
+/* 網格系統 (佈局不碰顏色) */
+.features-grid, .types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+.feature-card, .type-card {
+    padding: 50px 30px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    /* 這裡會繼承你原本 .oily, .dry 等標籤的配色 */
+}
+
+.type-tag {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* ==========================================
+   4. 按鈕樣式 (Buttons)
+   ========================================== */
 .btn-primary-large {
     border: none;
+    padding: 18px 60px;
+    border-radius: 50px;
     cursor: pointer;
     font-size: 1.1rem;
-    font-weight: 500;
     transition: all 0.3s ease;
-    /* 顏色會抓取你原本 CSS 設定的 background-color */
+    /* 這裡會抓取你原本 CSS 設定的背景色 */
 }
 
 .btn-primary-large:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* ==========================================
+   5. 測驗區塊 (Quiz)
+   ========================================== */
+#quiz-box {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.footer {
+    padding: 60px 0;
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.6;
+    border-top: 1px solid rgba(0,0,0,0.05);
 }
