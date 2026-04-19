@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>皮膚測驗系統 - 蘊光研所 Varnish.lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="intro-style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🌟 皮膚護理</div>
+            <ul class="nav-menu">
+                <li><a href="intro.html" class="active">介紹</a></li>
+                <li><a href="index.html">開始測驗</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="subtitle">FIND YOUR GLOW</span>
+                <h1>了解您的皮膚類型</h1>
+                <p>透過科學診斷，為您定制專屬的護理方案</p>
+                <a href="index.html" class="btn-primary">立即開始測驗</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>功能介紹</h2>
+                <div class="line"></div>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>精準診斷</h3>
+                    <p>科學問卷設計，準確判別膚質</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>節省時間</h3>
+                    <p>只需 3 分鐘，快速獲得結果</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>完整建議</h3>
+                    <p>專業護理方案與產品建議</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="skin-types">
+        <div class="container">
+            <div class="section-header">
+                <h2>皮膚類型詳解</h2>
+                <p>了解不同膚質的特徵與保養關鍵</p>
+            </div>
+            <div class="types-grid">
+                <div class="type-card oily">
+                    <div class="type-tag">OILY</div>
+                    <h3>🛢️ 油性皮膚</h3>
+                    <p>油脂分泌旺盛，毛孔較明顯</p>
+                    <div class="care-tip">重點：深層清潔、控油平衡</div>
+                </div>
+                <div class="type-card dry">
+                    <div class="type-tag">DRY</div>
+                    <h3>💧 乾性皮膚</h3>
+                    <p>皮膚緊繃，容易產生細紋與脫皮</p>
+                    <div class="care-tip">重點：深層補水、修護屏障</div>
+                </div>
+                <div class="type-card combination">
+                    <div class="type-tag">MIX</div>
+                    <h3>⚖️ 混合性皮膚</h3>
+                    <p>T字部油膩，兩頰乾燥</p>
+                    <div class="care-tip">重點：分區護理、水油平衡</div>
+                </div>
+                <div class="type-card normal">
+                    <div class="type-tag">NORMAL</div>
+                    <h3>✨ 中性皮膚</h3>
+                    <p>理想的油水平衡狀態</p>
+                    <div class="care-tip">重點：基礎保濕、預防老化</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>常見問題</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h4>Q: 測驗結果準確嗎？</h4>
+                    <p>基於皮膚學基礎設計，能提供初步判斷建議。</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Q: 我的隱私安全嗎？</h4>
+                    <p>測驗完全本地執行，我們不收集任何個人資料。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 皮膚護理測驗系統 ｜ 蘊光研所 Varnish.lab</p>
+    </footer>
+</body>
+</html>
