@@ -1,117 +1,48 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>皮膚測驗</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <!-- 導航欄 -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">🌟 皮膚護理</div>
-            <ul class="nav-menu">
-                <li><a href="intro.html">介紹</a></li>
-                <li><a href="index.html" class="active">開始測驗</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="quiz-header">
-            <h1>皮膚類型測驗</h1>
-            <p>回答以下 3 道問題，了解您的皮膚類型</p>
-        </div>
-
-        <div class="quiz-content" id="quizContent">
-            <!-- 第一題 -->
-            <div class="question-block active" data-question="1">
-                <h2>問題 1: 您的皮膚通常感覺如何？</h2>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="question1" value="oil" data-type="油性">
-                        <span>油膩、容易出油</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="question1" value="dry" data-type="乾性">
-                        <span>乾燥、容易緊繃</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="question1" value="combination" data-type="混合">
-                        <span>T字部位油膩，其他部位正常或乾燥</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="question1" value="normal" data-type="中性">
-                        <span>平衡、不油不乾</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- 第二題 -->
-            <div class="question-block" data-question="2">
-                <h2>問題 2: 您的皮膚毛孔情況如何？</h2>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="question2" value="large" data-type="油性">
-                        <span>毛孔粗大，容易看見</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="question2" value="small" data-type="乾性">
-                        <span>毛孔細小，幾乎看不見</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="question2" value="mixed" data-type="混合">
-                        <span>額頭和鼻子毛孔粗大，其他部位較細</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="question2" value="normal-pore" data-type="中性">
-                        <span>毛孔大小均勻、正常</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- 第三題 -->
-            <div class="question-block" data-question="3">
-                <h2>問題 3: 您的皮膚容易出現哪些問題？</h2>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="question3" value="acne" data-type="油性">
-                        <span>粉刺、痘痘頻繁出現</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="question3" value="flaking" data-type="乾性">
-                        <span>乾紅、脫皮、敏感</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="question3" value="both" data-type="混合">
-                        <span>額頭有痘痘，其他部位乾燥</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="question3" value="none" data-type="中性">
-                        <span>很少出現明顯問題</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <div class="result-section" id="resultSection">
-            <div class="result-card">
-                <h2>您的皮膚類型是：</h2>
-                <p class="result-type" id="resultType"></p>
-                <div class="result-description" id="resultDescription"></div>
-                <button class="btn-reset" onclick="resetQuiz()">重新測驗</button>
-            </div>
-        </div>
-
-        <div class="navigation">
-            <button class="btn-nav" id="prevBtn" onclick="previousQuestion()">上一題</button>
-            <span class="progress" id="progress">1 / 3</span>
-            <button class="btn-nav" id="nextBtn" onclick="nextQuestion()">下一題</button>
-            <button class="btn-submit" id="submitBtn" onclick="submitQuiz()" style="display:none;">提交答案</button>
-        </div>
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">🌟 蘊光研所 Varnish.lab</div>
+        <ul class="nav-menu">
+            <li><a href="#" onclick="location.reload()">回介紹</a></li>
+        </ul>
     </div>
+</nav>
 
-    <script src="script.js"></script>
-</body>
-</html>
+<div id="intro-wrapper">
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="brand-subtitle">REFINE. SEAL. RADIATE.</span>
+                <h1>了解您的皮膚類型</h1>
+                <p>透過簡單的測驗，發現最適合您的護理方案</p>
+                <button onclick="startQuiz()" class="btn-primary-large">立即開始測驗</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="features"> ... </section>
+    <section class="skin-types"> ... </section>
+    <section class="faq"> ... </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>準備好了嗎？</h2>
+            <button onclick="startQuiz()" class="btn-primary-large">開始測驗</button>
+        </div>
+    </section>
+</div>
+
+<div id="quiz-wrapper" style="display: none;">
+    <section class="quiz-container">
+        <div class="container">
+            <div id="quiz-box">
+                <h2>皮膚特質測驗</h2>
+                <div id="question-container">
+                    </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2026 蘊光研所 Varnish.lab。版權所有。</p>
+</footer>
