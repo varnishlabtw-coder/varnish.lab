@@ -1,47 +1,52 @@
 <nav class="navbar">
     <div class="nav-container">
-        <div class="logo">🌟 蘊光研所 Varnish.lab</div>
+        <div class="logo" style="cursor: pointer;" onclick="location.reload()">🌟 蘊光研所 Varnish.lab</div>
         <ul class="nav-menu">
-            <li><a href="#" onclick="location.reload()">回介紹</a></li>
+            <li><a href="#faq-section">常見問題</a></li>
         </ul>
     </div>
 </nav>
 
-<div id="intro-wrapper">
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <span class="brand-subtitle">REFINE. SEAL. RADIATE.</span>
-                <h1>了解您的皮膚類型</h1>
-                <p>透過簡單的測驗，發現最適合您的護理方案</p>
-                <button onclick="startQuiz()" class="btn-primary-large">立即開始測驗</button>
+<main class="main-content">
+    
+    <div id="intro-wrapper">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="brand-subtitle">REFINE. SEAL. RADIATE.</span>
+                    <h1>了解您的皮膚類型</h1>
+                    <p>透過科學診斷，為您定制專屬的護理方案</p>
+                    <button onclick="startQuiz()" class="btn-primary-large">立即開始測驗</button>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="features"> ... </section>
-    <section class="skin-types"> ... </section>
-    <section class="faq"> ... </section>
+        <section class="features"> ... </section>
+        <section class="skin-types"> ... </section>
+        
+        <section id="faq-section" class="faq"> ... </section>
 
-    <section class="cta">
-        <div class="container">
-            <h2>準備好了嗎？</h2>
-            <button onclick="startQuiz()" class="btn-primary-large">開始測驗</button>
-        </div>
-    </section>
-</div>
-
-<div id="quiz-wrapper" style="display: none;">
-    <section class="quiz-container">
-        <div class="container">
-            <div id="quiz-box">
-                <h2>皮膚特質測驗</h2>
-                <div id="question-container">
-                    </div>
+        <section class="cta">
+            <div class="container">
+                <h2>準備好了嗎？</h2>
+                <button onclick="startQuiz()" class="btn-primary-large">開始測驗</button>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
+
+    <div id="quiz-wrapper" style="display: none;">
+        <section class="quiz-container">
+            <div class="container">
+                <div id="quiz-box">
+                    <span class="brand-subtitle">SKIN ANALYSIS</span>
+                    <h2>皮膚特質測驗</h2>
+                    <div id="question-container">
+                        </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
 
 <footer class="footer">
     <p>&copy; 2026 蘊光研所 Varnish.lab。版權所有。</p>
