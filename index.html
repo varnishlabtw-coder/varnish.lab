@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蘊光研所 · 肌膚診斷</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F4EF;
+    --cream2: #EFE9DF;
+    --green: #4A7C59;
+    --green-light: #D6E8DC;
+    --green-mid: #7EAD8C;
+    --brown: #8C6E52;
+    --brown-light: #EDE0D4;
+    --text: #2C2C28;
+    --text-muted: #7A7870;
+    --border: rgba(74,124,89,0.18);
+    --white: #FFFFFF;
+    --red-soft: #F5E8E4;
+    --red-text: #8B3A2F;
+    --amber-soft: #F5ECD8;
+    --amber-text: #7A5020;
+    --purple-soft: #ECEAF5;
+    --purple-text: #4A3F7A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* Header */
+  .site-header {
+    text-align: center;
+    padding: 2.5rem 1rem 0;
+  }
+  .brand-en {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .brand-zh {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--text);
+  }
+  .brand-sub {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+  .line-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: #06C755;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.85rem 2rem;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 14.5px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 0.75rem;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .line-btn:hover { background: #05a847; transform: translateY(-1px); }
+  .line-icon { width: 22px; height: 22px; flex-shrink: 0; }
+  .brand-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--green-mid);
+    margin: 0.75rem auto 0;
+  }
+
+  /* Layout */
+  #app {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+
+  /* Screen management */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Card */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  /* Start screen */
+  .start-visual {
+    width: 72px;
+    height: 72px;
+    background: var(--green-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 30px;
+  }
+  .start-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 19px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+    text-align: center;
+  }
+  .start-sub {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.85;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .start-btn {
+    display: block;
+    width: 100%;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.85rem 2rem;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 14.5px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .start-btn:hover { background: #3d6b4a; transform: translateY(-1px); }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 1.75rem; }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+  }
+  .progress-track {
+    height: 3px;
+    background: var(--cream2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* Question */
+  .q-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 99px;
+    margin-bottom: 1rem;
+  }
+  .cat-skin { background: var(--green-light); color: var(--green); }
+  .cat-sensitive { background: var(--amber-soft); color: var(--amber-text); }
+  .cat-concern { background: var(--purple-soft); color: var(--purple-text); }
+
+  .q-text {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 16.5px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 0.35rem;
+  }
+  .q-hint {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 1.4rem;
+    line-height: 1.6;
+  }
+
+  /* Options */
+  .opt-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    width: 100%;
+    text-align: left;
+    background: var(--cream);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.55rem;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .opt-btn:hover { background: var(--cream2); border-color: var(--border); }
+  .opt-btn.sel-green { background: var(--green-light); border-color: var(--green-mid); }
+  .opt-btn.sel-amber { background: var(--amber-soft); border-color: #C8A06A; }
+  .opt-btn.sel-purple { background: var(--purple-soft); border-color: #9B94CC; }
+  .opt-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+  .opt-body { display: flex; flex-direction: column; gap: 2px; }
+  .opt-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .opt-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .opt-btn.sel-green .opt-desc { color: var(--green); }
+  .opt-btn.sel-amber .opt-desc { color: var(--amber-text); }
+  .opt-btn.sel-purple .opt-desc { color: var(--purple-text); }
+  .lv-pill {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 1px 8px;
+    border-radius: 99px;
+    margin-bottom: 3px;
+    letter-spacing: 0.03em;
+  }
+  .lv1-pill { background: var(--green-light); color: var(--green); }
+  .lv2-pill { background: var(--amber-soft); color: var(--amber-text); }
+  .lv3-pill { background: var(--red-soft); color: var(--red-text); }
+
+  /* Multi select */
+  .multi-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 0.8rem;
+  }
+  .chk-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+    background: var(--cream);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 0.8rem 1.1rem;
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .chk-opt:hover { background: var(--cream2); border-color: var(--border); }
+  .chk-opt.checked { background: var(--purple-soft); border-color: #9B94CC; color: var(--purple-text); }
+  .chk-box {
+    width: 18px; height: 18px;
+    border: 1.5px solid #C0BDB4;
+    border-radius: 5px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    background: #fff;
+    transition: all 0.15s;
+  }
+  .chk-opt.checked .chk-box { background: var(--green); border-color: var(--green); color: #fff; }
+
+  /* Next button */
+  .next-btn {
+    margin-top: 1.25rem;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 1.75rem;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    opacity: 0.35;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .next-btn.active { opacity: 1; pointer-events: auto; }
+  .next-btn.active:hover { transform: translateY(-1px); }
+
+  /* Result */
+  .result-header {
+    text-align: center;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--cream2);
+  }
+  .result-icon {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    margin: 0 auto 1rem;
+  }
+  .icon-oily { background: var(--amber-soft); }
+  .icon-dry { background: var(--green-light); }
+  .icon-combo { background: var(--purple-soft); }
+  .result-skin-type {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .result-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 0.85rem;
+  }
+  .rtag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 11px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+  .rt-green { background: var(--green-light); color: var(--green); }
+  .rt-amber { background: var(--amber-soft); color: var(--amber-text); }
+  .rt-red { background: var(--red-soft); color: var(--red-text); }
+  .rt-purple { background: var(--purple-soft); color: var(--purple-text); }
+  .rt-brown { background: var(--brown-light); color: var(--brown); }
+  .result-desc {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    text-align: center;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: var(--green);
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--green-light);
+  }
+
+  .therapy-card {
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+    margin-bottom: 0.65rem;
+  }
+  .therapy-main { background: var(--green-light); border: 1px solid rgba(74,124,89,0.25); }
+  .therapy-addon { background: var(--purple-soft); border: 1px solid rgba(155,148,204,0.3); }
+  .therapy-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    padding: 2px 9px;
+    border-radius: 99px;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+  .badge-main { background: rgba(74,124,89,0.2); color: var(--green); }
+  .badge-addon { background: rgba(155,148,204,0.25); color: var(--purple-text); }
+  .therapy-name {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.04em;
+  }
+  .therapy-desc {
+    font-size: 12.5px;
+    line-height: 1.75;
+  }
+  .therapy-main .therapy-desc { color: #4A6B55; }
+  .therapy-addon .therapy-desc { color: var(--purple-text); }
+
+  .tip-box {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    margin-top: 1rem;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .tip-leaf { color: var(--green); flex-shrink: 0; }
+
+  .restart-btn {
+    display: block;
+    width: 100%;
+    margin-top: 1.5rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--cream2);
+    border-radius: 50px;
+    padding: 0.75rem;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .restart-btn:hover { background: var(--cream2); color: var(--text); }
+
+  /* Footer */
+  .site-footer {
+    text-align: center;
+    padding: 1.5rem 1rem 2.5rem;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand-en">Professional Skin Care</div>
+  <div class="brand-zh">蘊光研所</div>
+  <div class="brand-sub">Varnish.lab</div>
+  <div class="brand-divider"></div>
+</header>
+
+<div id="app">
+  <!-- Start -->
+  <div id="start-screen" class="screen active">
+    <div class="card" style="text-align:center; padding:2.5rem 2rem;">
+      <div class="start-visual">🌿</div>
+      <div class="start-title">肌膚類型診斷</div>
+      <div class="start-sub">
+        回答幾個簡單問題<br>
+        了解你的肌膚狀況<br>
+        並獲得專屬療程建議
+      </div>
+      <button class="start-btn" onclick="startQuiz()">開始診斷</button>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div id="quiz-screen" class="screen">
+    <div class="card">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="q-counter">第 1 題</span>
+          <span id="q-pct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress" style="width:0%"></div>
+        </div>
+      </div>
+      <div id="q-category" class="q-category cat-skin">肌膚診斷</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-hint" id="q-hint"></div>
+      <div id="options-container"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQ()">下一題</button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div id="result-screen" class="screen">
+    <div class="card">
+      <div class="result-header">
+        <div class="result-icon" id="result-icon"></div>
+        <div class="result-skin-type" id="result-skin-type"></div>
+        <div class="result-tags" id="result-tags"></div>
+        <div class="result-desc" id="result-desc"></div>
+      </div>
+      <div class="section-title">專屬療程建議</div>
+      <div id="therapy-list"></div>
+      <div class="tip-box" id="tip-box"></div>
+      <a href="https://lin.ee/OMJjuK6" target="_blank" class="line-btn">
+        <svg class="line-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.93 7.57c-.04-.11-.08-.22-.13-.33-.33-.8-.87-1.5-1.57-2.01A6.96 6.96 0 0 0 12 6c-3.86 0-7 3.14-7 7 0 1.9.76 3.63 2 4.9v.1l-.9 3.3 3.4-.9c1.14.64 2.45 1 3.83 1 3.86 0 7-3.14 7-7 0-1.54-.5-2.97-1.35-4.13l-.08-.22-.08.24zM8.5 13.5h-1v-4h1v4zm2.5 0h-1v-2.5L8.5 13.5H7.5v-4h1v2.5l1.5-2.5h1v4zm4 0h-3v-4h1v3h2v1zm2-3h-1v3h-1v-3h-1v-1h3v1z"/></svg>
+        加入官方 Line，首次體驗課程，立即享優惠
+      </a>
+      <button class="restart-btn" onclick="restart()">重新診斷</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">© 蘊光研所 Varnish.lab · 專業肌膚管理</footer>
+
+<script>
+const BASE_STEPS = [
+  {
+    id:'q1', type:'single', cat:'肌膚診斷', catClass:'cat-skin',
+    text:'洗臉後不擦任何保養品，過了約 1 小時，你的臉感覺如何？', hint:'',
+    options:[
+      {icon:'💧', title:'乾燥緊繃', desc:'有脫皮感，感覺很乾', val:'dry'},
+      {icon:'🌗', title:'T字出油，臉頰偏乾', desc:'額頭鼻子出油，兩頰緊繃', val:'combo'},
+      {icon:'🫧', title:'全臉出油', desc:'整臉都感覺油光滿面', val:'oily'}
+    ]
+  },
+  {
+    id:'q2', type:'single', cat:'肌膚診斷', catClass:'cat-skin',
+    text:'到了下午，你的臉通常是什麼狀態？', hint:'',
+    options:[
+      {icon:'😮‍💨', title:'更緊繃、妝容浮粉', desc:'臉越來越乾，底妝難附著', val:'dry'},
+      {icon:'🌗', title:'T字出油，臉頰尚可', desc:'局部出油但不是全臉', val:'combo'},
+      {icon:'🌟', title:'全臉出油，妝容脫落', desc:'底妝容易因出油而脫妝', val:'oily'}
+    ]
+  },
+  {
+    id:'q3', type:'single', cat:'肌膚診斷', catClass:'cat-skin',
+    text:'你的毛孔狀況是？', hint:'',
+    options:[
+      {icon:'🔍', title:'幾乎看不到毛孔', desc:'皮膚較薄，毛孔細小', val:'dry'},
+      {icon:'⚖️', title:'T字毛孔明顯，臉頰細緻', desc:'鼻頭與額頭毛孔較大', val:'combo'},
+      {icon:'🔎', title:'全臉毛孔粗大', desc:'尤其 T 字區最明顯', val:'oily'}
+    ]
+  },
+  {
+    id:'q4', type:'single', cat:'敏感評估', catClass:'cat-sensitive',
+    text:'你的皮膚容易出現過敏症狀嗎？',
+    hint:'輕微刺痛、泛紅、起疹、不耐受產品等都算喔',
+    options:[
+      {icon:'⚠️', title:'是，有過敏困擾', desc:'', val:'yes'},
+      {icon:'✅', title:'沒有，皮膚蠻穩定的', desc:'', val:'no'}
+    ]
+  }
+];
+
+const STEP_LV = {
+  id:'q4a', type:'single', cat:'敏感分級', catClass:'cat-sensitive',
+  text:'你的過敏程度大概是？', hint:'選擇最接近平時狀況的描述',
+  options:[
+    {icon:'🌿', title:'換季或壓力大才過敏', desc:'其他時間皮膚還算穩定', val:'lv1', pill:'lv1-pill', pillText:'LV1 輕度'},
+    {icon:'⚠️', title:'保養品也容易出包', desc:'除換季壓力外，很難挑到合適產品', val:'lv2', pill:'lv2-pill', pillText:'LV2 中度'},
+    {icon:'🚨', title:'皮膚屏障長期受損', desc:'長期泛紅、大痘，幾乎找不到能用的產品', val:'lv3', pill:'lv3-pill', pillText:'LV3 重度'}
+  ]
+};
+
+const STEP_CONCERN = {
+  id:'q4b', type:'multi', cat:'改善目標', catClass:'cat-concern',
+  text:'你最想改善哪些皮膚狀況？', hint:'可複選多項',
+  options:[
+    {icon:'🕳️', title:'毛孔粗大', val:'pore'},
+    {icon:'🫧', title:'痘痘粉刺困擾', val:'acne'},
+    {icon:'🧼', title:'基礎清潔保養', val:'cleanse'},
+    {icon:'💦', title:'補水保濕改善', val:'hydration'},
+    {icon:'✨', title:'小臉撥筋拉提', val:'lift'}
+  ]
+};
+
+const THERAPIES = {
+  mandelic:{
+    name:'杏仁酸臉部煥膚',
+    desc:'溫和果酸有效去除老廢角質，改善毛孔粗大與膚色不均，讓肌膚煥然一新。適合肌膚穩定的油性肌與混合肌，幫助控油並細緻毛孔。'
+  },
+  efg:{
+    name:'EFG 肌膚生長因子課程',
+    desc:'透過生長因子深入修護肌膚，促進細胞再生，改善肌膚不穩定與泛紅問題。適合中度敏感或混合肌膚，溫和有效地重建肌膚防護力。'
+  },
+  exosome:{
+    name:'外泌體保濕課程',
+    desc:'外泌體富含高效修護因子，能深層補水並強化肌膚屏障，緩解乾燥緊繃與敏感不適。特別適合乾燥肌及中重度敏感肌使用。'
+  },
+  super_efg:{
+    name:'Superfacial + EFG 肌膚生長因子課程',
+    desc:'Superfacial 深層清潔與 EFG 修護雙效合一，針對屏障受損、敏感泛紅肌膚進行全面舒緩與重建，是中重度敏感肌的最佳選擇。'
+  },
+  super_exo:{
+    name:'Superfacial + 外泌體保濕課程',
+    desc:'Superfacial 溫和疏通毛孔後，搭配外泌體密集修護，專為乾性重度敏感肌設計，有效緩解極易泛紅、屏障嚴重受損的肌膚狀況。'
+  },
+  lift:{
+    name:'小臉撥筋拉提（加價購）',
+    desc:'透過專業撥筋手法促進淋巴循環、緊緻輪廓，讓臉部線條更立體小巧。適合作為療程後的加價升級，肌膚穩定者方可搭配。'
+  }
+};
+
+function getRecommendations(skinType, sensitive, lv, concerns) {
+  let main=null, addon=null, tip='', desc='';
+  const label = {oily:'油性肌', dry:'乾性肌', combo:'混合肌'}[skinType];
+  if(sensitive==='yes') {
+    if(lv==='lv3') {
+      main = skinType==='dry' ? 'super_exo' : 'super_efg';
+      desc = `你是${label}，同時有 LV3 重度敏感，皮膚屏障嚴重受損。建議以最溫和且高修護的療程優先穩定肌膚。`;
+      tip = '避免使用含酒精、香料的產品，先以修護屏障為首要目標，待肌膚穩定後再考慮其他療程。';
+    } else if(lv==='lv2') {
+      if(skinType==='dry') { main='exosome'; addon='super_efg'; }
+      else { main='efg'; addon='exosome'; }
+      desc = `你是${label}，同時有 LV2 中度敏感。肌膚需要溫和修護，以下療程能有效改善敏感狀況。`;
+      tip = '更換新保養品時，建議先在耳後做 48 小時貼膚測試，確認不過敏再全臉使用。';
+    } else {
+      main = skinType==='dry' ? 'exosome' : 'efg';
+      desc = `你是${label}，偶爾有 LV1 輕度敏感。平時肌膚較穩定，著重修護保養即可。`;
+      tip = '換季前提前加強保濕，可有效降低輕度敏感發作的機率。';
+    }
+  } else {
+    const wantsLift = concerns && concerns.includes('lift');
+    const wantsHydration = concerns && concerns.includes('hydration');
+    const wantsPore = concerns && concerns.includes('pore');
+    const wantsAcne = concerns && concerns.includes('acne');
+    if(skinType==='dry'||wantsHydration) {
+      main='exosome';
+      desc = `你是${label}，肌膚穩定無敏感。`;
+      desc += wantsHydration ? '針對補水保濕的需求，外泌體課程是最直接有效的選擇。' : '建議以深層補水為主，讓肌膚維持水潤飽滿的狀態。';
+      tip = '每天使用含玻尿酸的保濕精華，洗臉後 3 分鐘內立即上保養效果最佳。';
+    } else {
+      main='mandelic';
+      desc = `你是${label}，肌膚穩定無敏感。`;
+      desc += wantsPore ? '針對毛孔粗大的困擾，杏仁酸煥膚能有效細緻毛孔、改善膚質。' : wantsAcne ? '針對痘痘粉刺困擾，杏仁酸溫和去角質，有效疏通毛孔減少粉刺生成。' : '杏仁酸煥膚能有效控油、細緻毛孔，讓肌膚維持清爽均勻狀態。';
+      tip = '做完杏仁酸療程後，務必加強防曬，避免日曬導致敏感或色素沉澱。';
+    }
+    if(wantsLift) addon='lift';
+  }
+  return {main,addon,tip,desc};
+}
+
+let steps=[], current=0, answers={}, multiSel=new Set(), selIdx=null;
+
+function startQuiz() {
+  steps=[...BASE_STEPS]; current=0; answers={}; multiSel=new Set(); selIdx=null;
+  renderStep(); show('quiz-screen');
+}
+
+function renderStep() {
+  selIdx=null; multiSel=new Set();
+  const s=steps[current];
+  const total=steps.length+1;
+  const pct=Math.round((current/total)*100);
+  document.getElementById('q-counter').textContent=`第 ${current+1} 題`;
+  document.getElementById('q-pct').textContent=pct+'%';
+  document.getElementById('progress').style.width=pct+'%';
+  const cat=document.getElementById('q-category');
+  cat.textContent=s.cat; cat.className='q-category '+s.catClass;
+  document.getElementById('q-text').textContent=s.text;
+  document.getElementById('q-hint').textContent=s.hint;
+  const con=document.getElementById('options-container');
+  con.innerHTML='';
+  const nb=document.getElementById('next-btn');
+  nb.className='next-btn';
+
+  if(s.type==='single') {
+    s.options.forEach((opt,i)=>{
+      const btn=document.createElement('button');
+      btn.className='opt-btn';
+      let html=`<span class="opt-icon">${opt.icon}</span><span class="opt-body">`;
+      if(opt.pill) html+=`<span class="lv-pill ${opt.pill}">${opt.pillText}</span>`;
+      html+=`<span class="opt-title">${opt.title}</span>`;
+      if(opt.desc) html+=`<span class="opt-desc">${opt.desc}</span>`;
+      html+='</span>';
+      btn.innerHTML=html;
+      btn.onclick=()=>{
+        document.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('sel-green','sel-amber','sel-purple'));
+        const cls=s.catClass==='cat-sensitive'?'sel-amber':s.catClass==='cat-concern'?'sel-purple':'sel-green';
+        btn.classList.add(cls); selIdx=i; nb.classList.add('active');
+      };
+      con.appendChild(btn);
+    });
+    nb.textContent=current<steps.length-1?'下一題 →':'查看診斷結果';
+  } else {
+    const hint=document.createElement('div');
+    hint.className='multi-label'; hint.textContent='可複選多項';
+    con.appendChild(hint);
+    s.options.forEach((opt,i)=>{
+      const btn=document.createElement('button');
+      btn.className='chk-opt';
+      btn.innerHTML=`<span class="chk-box" id="ck${i}"></span><span class="opt-icon">${opt.icon}</span><span>${opt.title}</span>`;
+      btn.onclick=()=>{
+        if(multiSel.has(i)){multiSel.delete(i);btn.classList.remove('checked');document.getElementById('ck'+i).textContent='';}
+        else{multiSel.add(i);btn.classList.add('checked');document.getElementById('ck'+i).textContent='✓';}
+        if(multiSel.size>0) nb.classList.add('active'); else nb.classList.remove('active');
+      };
+      con.appendChild(btn);
+    });
+    nb.textContent='查看診斷結果';
+  }
+}
+
+function nextQ() {
+  const s=steps[current];
+  if(s.type==='single') {
+    if(selIdx===null) return;
+    const val=s.options[selIdx].val;
+    answers[s.id]=val;
+    if(s.id==='q4') steps.push(val==='yes'?STEP_LV:STEP_CONCERN);
+  } else {
+    if(multiSel.size===0) return;
+    answers[s.id]=Array.from(multiSel).map(i=>s.options[i].val);
+  }
+  current++;
+  if(current<steps.length) renderStep(); else showResult();
+}
+
+function calcSkinType() {
+  const c={dry:0,combo:0,oily:0};
+  ['q1','q2','q3'].forEach(k=>{if(answers[k])c[answers[k]]++;});
+  return Object.keys(c).reduce((a,b)=>c[a]>=c[b]?a:b);
+}
+
+function showResult() {
+  const skinType=calcSkinType();
+  const sensitive=answers['q4'];
+  const lv=answers['q4a']||null;
+  const concerns=answers['q4b']||null;
+  const {main,addon,tip,desc}=getRecommendations(skinType,sensitive,lv,concerns);
+  const typeLabel={oily:'油性肌',dry:'乾性肌',combo:'混合肌'};
+  const icon=document.getElementById('result-icon');
+  icon.className='result-icon icon-'+skinType;
+  icon.textContent={oily:'✨',dry:'💧',combo:'⚖️'}[skinType];
+  document.getElementById('result-skin-type').textContent=typeLabel[skinType];
+  const skinTagCls={oily:'rt-amber',dry:'rt-green',combo:'rt-purple'}[skinType];
+  let tagsHTML=`<span class="rtag ${skinTagCls}">${typeLabel[skinType]}</span>`;
+  if(sensitive==='yes'&&lv) {
+    const lvCls={lv1:'rt-green',lv2:'rt-amber',lv3:'rt-red'}[lv];
+    const lvLabel={lv1:'LV1 輕度敏感',lv2:'LV2 中度敏感',lv3:'LV3 重度敏感'}[lv];
+    tagsHTML+=`<span class="rtag ${lvCls}">${lvLabel}</span>`;
+  }
+  if(concerns){
+    const cm={pore:'毛孔粗大',acne:'痘痘粉刺',cleanse:'基礎清潔',hydration:'補水保濕',lift:'拉提緊緻'};
+    concerns.forEach(c=>{tagsHTML+=`<span class="rtag rt-brown">${cm[c]}</span>`;});
+  }
+  document.getElementById('result-tags').innerHTML=tagsHTML;
+  document.getElementById('result-desc').textContent=desc;
+  const list=document.getElementById('therapy-list');
+  list.innerHTML='';
+  if(main){
+    const t=THERAPIES[main];
+    list.innerHTML+=`<div class="therapy-card therapy-main"><span class="therapy-badge badge-main">推薦療程</span><div class="therapy-name">${t.name}</div><div class="therapy-desc">${t.desc}</div></div>`;
+  }
+  if(addon){
+    const t=THERAPIES[addon];
+    const isLift=addon==='lift';
+    list.innerHTML+=`<div class="therapy-card therapy-addon"><span class="therapy-badge badge-addon">${isLift?'加價購':'搭配療程'}</span><div class="therapy-name">${t.name}</div><div class="therapy-desc">${t.desc}</div></div>`;
+  }
+  document.getElementById('tip-box').innerHTML=`<span class="tip-leaf">🌱</span><span>${tip}</span>`;
+  show('result-screen');
+}
+
+function restart() {
+  steps=[...BASE_STEPS]; current=0; answers={}; multiSel=new Set(); selIdx=null;
+  show('start-screen');
+}
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>
